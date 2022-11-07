@@ -5,6 +5,11 @@ import { Camera } from 'expo-camera';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 
+import { Amplify } from 'aws-amplify'
+import awsconfig from './src/aws-exports'
+
+Amplify.configure(awsconfig)
+
 export default function App() {
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();

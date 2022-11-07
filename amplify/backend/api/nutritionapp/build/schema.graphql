@@ -1,0 +1,215 @@
+
+type Image {
+  id: ID!
+  key: String!
+  labels: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelImageConnection {
+  items: [Image]!
+  nextToken: String
+}
+
+input ModelImageFilterInput {
+  id: ModelIDInput
+  key: ModelStringInput
+  labels: ModelStringInput
+  and: [ModelImageFilterInput]
+  or: [ModelImageFilterInput]
+  not: ModelImageFilterInput
+}
+
+type Query {
+  getImage(id: ID!): Image
+  listImages(filter: ModelImageFilterInput, limit: Int, nextToken: String): ModelImageConnection
+}
+
+input ModelImageConditionInput {
+  key: ModelStringInput
+  labels: ModelStringInput
+  and: [ModelImageConditionInput]
+  or: [ModelImageConditionInput]
+  not: ModelImageConditionInput
+}
+
+input CreateImageInput {
+  id: ID
+  key: String!
+  labels: [String]
+}
+
+input UpdateImageInput {
+  id: ID!
+  key: String
+  labels: [String]
+}
+
+input DeleteImageInput {
+  id: ID!
+}
+
+type Mutation {
+  createImage(input: CreateImageInput!, condition: ModelImageConditionInput): Image
+  updateImage(input: UpdateImageInput!, condition: ModelImageConditionInput): Image
+  deleteImage(input: DeleteImageInput!, condition: ModelImageConditionInput): Image
+}
+
+type Subscription {
+  onCreateImage(owner: String): Image @aws_subscribe(mutations: ["createImage"])
+  onUpdateImage(owner: String): Image @aws_subscribe(mutations: ["updateImage"])
+  onDeleteImage(owner: String): Image @aws_subscribe(mutations: ["deleteImage"])
+}
+

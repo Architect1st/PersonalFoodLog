@@ -1,0 +1,17 @@
+{
+  "resourceName": "reactnativenutritionappimagestorage",
+  "policyUUID": "b8770ad2",
+  "bucketName": "nutritionappba9b6c4ca45149ff8061ef85f03d2a51",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "nutritionapp",
+    "serviceName": "AppSync",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authnutritionappd3005467"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": []
+  }
+}
