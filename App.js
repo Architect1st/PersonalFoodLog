@@ -6,14 +6,22 @@ import { Camera } from 'expo-camera';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, photoPlaceholder, Storage} from 'aws-amplify';
 import { createImage } from './src/graphql/mutations';
 import { listImages } from './src/graphql/queries';
+
+import { S3Image } from 'aws-amplify-react-native';
 
 import { Amplify } from 'aws-amplify'
 import awsconfig from './src/aws-exports'
 
 Amplify.configure(awsconfig)
+// Amplify.configure({
+//   ...awsconfig,
+//   Analytics: {
+//       disabled: true,
+//   },
+// });
 
 //display picture information
 const Section = ({ children, title }): Node => {
@@ -36,8 +44,8 @@ export default function App() {
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
-  const [images, setImages] = useState([]);
 
+  const [images, setImages] = useState([]);
   const [showCamera, setShowCamera] = useState(false) // to control camera preview
 
   // Display on Home Screen
@@ -53,13 +61,12 @@ export default function App() {
     try {
       const imageData = await API.graphql(graphqlOperation(listImages));
       const images = imageData.data.listImages.items;
-      setImages(images);
-    } catch (err) { console.log('error fetching images') }
+      setImages(images); //put images into setImages[]
+    } catch (err) { console.log('error fetching images'); console.log(err) }
   }
   
-  async function addImage() {
+  async function addImage(key) {
     try {
-      const key = (new Date()).toISOString();
       const image = { key: key, labels: ['cat', 'animal'] };
       setImages([...images, image]);
       await API.graphql(graphqlOperation(createImage, { input: image }));
@@ -87,50 +94,77 @@ export default function App() {
   // Take Picture function
   let takePic = async () => {
     let options = {
-      quality: 1, // can be set to 0.5
+      quality: 0.5, // can be set to 1
       base64: true,
       exif: false
     };
 
     let newPhoto = await cameraRef.current.takePictureAsync(options);
     setPhoto(newPhoto);
-  };
+
+    const response = await fetch(newPhoto.uri);
+    const blob = await response.blob();
+    const key = newPhoto.uri.split("/").pop();
+
+    Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
+      .then(result => {
+        console.log(result)
+        addImage(key);
+        setShowCamera(false);
+      })
+      .catch(err => {
+        console.log(err)
+      });
   
-function storeImage(photo){
-  const response = fetch(photo.uri);
-  const blob = response.blob();
-  const key = photo.uri.split("/").pop();
-  Storage.put(key, blob, { level: 'private' })
-  .then(result => {
-    console.log(result)
-    addImage(key); // add image to home page
-    // setShowCamera(false);
-    })
-    .catch(err => {
-      console.log(err)
-    });
-}
+
+};
+
+// function storeImage(photo){
+//   const key = photo.uri.split("/").pop();
+//   const fileType = photo.type;
+//   const access = { level: "public", contentType: 'image/jpg' };
+//   const owner = "public user";
+
+//   const blobData = photo;
+  
+//   try {
+//     Storage.put(
+//       key, 
+//       blobData, 
+//       access,
+//       fileType,
+//       owner
+//       ).then(result => {
+//         console.log("Storage put result: "+ result);
+//         addImage(key); // add image to home page
+//         setShowCamera(false); // return to homapage
+//       })
+//   } catch (err) {
+//     console.log('error: ', err)
+//   }
+// }
   
   //display photo after photo is taken
   if (photo) {
     let sharePic = () => {
+      // storeImage(photo);
       shareAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });
     };
 
     let savePhoto = () => {
+      // storeImage(photo);
       MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });
-      storeImage(photo.uri);
     };
 
-    return (
-      <SafeAreaView style={styles.container}>
-        <Image style={styles.preview} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
+    return ( // show image preview and show buttons
+      <SafeAreaView style={styles.ImagePreviewContainer}>
+        <Image style={styles.ImagePreview} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
         <Button title="Share" onPress={sharePic} />
-        {hasMediaLibraryPermission ? <Button title="Save" onPress={savePhoto} /> : undefined}
+        {hasMediaLibraryPermission ? <Button title="Save & Upload" onPress={savePhoto} /> : undefined}
         <Button title="Discard" onPress={() => setPhoto(undefined)} />
       </SafeAreaView>
     );
@@ -160,7 +194,7 @@ function storeImage(photo){
       renderItem={({ item, index }) => (
         <View key={item.id ? item.id : index}>
           <View style={styles.imageContainer}>
-              <S3Image level="private" imgKey={item.key} style={styles.image}  />
+              <S3Image level="public" imgKey={item.key} style={styles.image}  />
             </View>
           <Section title={item.key}>
             {item.labels.map((label, index) => (
@@ -171,39 +205,9 @@ function storeImage(photo){
         </View>
       )}></FlatList>
     </SafeAreaView>
-
-    // default screen
-    //   <SafeAreaView>
-    //   <StatusBar style="auto" />
-    // <Button title="Create Image" onPress={addImage} />
-    // <FlatList 
-    //   data={images}
-    //   contentInsetAdjustmentBehavior="automatic"
-    //   // style={backgroundStyle}
-    //   renderItem={({ item, index }) => (
-    //     <View key={item.id ? item.id : index} >
-    //     <Section title={item.key}>
-    //       {item.labels.map((label, index) => (
-    //       <Text key={index}>{label}, </Text>))}
-    //       </Section>
-    //       </View>
-    //       )
-    //     }></FlatList>
-    // </SafeAreaView>
     );
-
-  // return (
-    // // default screen (with camera view)
-    // <Camera style={styles.container} ref={cameraRef}>
-    //   <View style={styles.buttonContainer}>
-    //     <Button title="Take Pic" onPress={takePic} />
-    //   </View>
-    //   <StatusBar style="auto" />
-    // </Camera>
-  // );
 }
 };
-
 
 const styles = StyleSheet.create({
   //Style for Photo information Section
@@ -255,18 +259,18 @@ const styles = StyleSheet.create({
   },
 
   // camera
-  // container: {
-  //   flex: 1,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
+  ImagePreviewContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   // buttonContainer: {
   //   backgroundColor: '#fff',
   //   alignSelf: 'flex-end'
   // },
-  // preview: {
-  //   alignSelf: 'stretch',
-  //   flex: 1
-  // }
+  ImagePreview: {
+    alignSelf: 'stretch',
+    flex: 1
+  }
 });
 

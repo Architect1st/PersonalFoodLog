@@ -5,7 +5,6 @@ type Image {
   labels: [String]
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
-  owner: String
 }
 
 input ModelStringInput {
@@ -216,8 +215,8 @@ input ModelSubscriptionImageFilterInput {
 }
 
 type Subscription {
-  onCreateImage(filter: ModelSubscriptionImageFilterInput, owner: String): Image @aws_subscribe(mutations: ["createImage"])
-  onUpdateImage(filter: ModelSubscriptionImageFilterInput, owner: String): Image @aws_subscribe(mutations: ["updateImage"])
-  onDeleteImage(filter: ModelSubscriptionImageFilterInput, owner: String): Image @aws_subscribe(mutations: ["deleteImage"])
+  onCreateImage(filter: ModelSubscriptionImageFilterInput): Image @aws_subscribe(mutations: ["createImage"])
+  onUpdateImage(filter: ModelSubscriptionImageFilterInput): Image @aws_subscribe(mutations: ["updateImage"])
+  onDeleteImage(filter: ModelSubscriptionImageFilterInput): Image @aws_subscribe(mutations: ["deleteImage"])
 }
 

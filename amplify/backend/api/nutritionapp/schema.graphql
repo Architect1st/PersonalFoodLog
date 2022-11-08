@@ -8,7 +8,13 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 #  description: String
 #}
 
-type Image @model @auth(rules: [{ allow: owner }]) {
+#type Image @model @auth(rules: [{ allow: owner }]) {
+#  id: ID!
+#  key: String!
+#  labels: [String]
+#}
+
+type Image @model{
   id: ID!
   key: String!
   labels: [String]

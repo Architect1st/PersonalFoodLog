@@ -2,12 +2,6 @@
     "AppSyncApiName": "nutritionapp",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false,
-    "AuthCognitoUserPoolId": {
-        "Fn::GetAtt": [
-            "authnutritionappd3005467",
-            "Outputs.UserPoolId"
-        ]
-    },
     "S3DeploymentBucket": "amplify-nutritionapp-dev-152757-deployment",
-    "S3DeploymentRootKey": "amplify-appsync-files/ba969b8dd9c2eaee996e942c022d593b2e189694"
+    "S3DeploymentRootKey": "amplify-appsync-files/99f19ad5d5c7bbcf9e6bf52f191ab85837b75a74"
 }

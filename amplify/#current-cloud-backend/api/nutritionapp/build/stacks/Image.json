@@ -351,36 +351,6 @@
         "ImageIAMRoleBCE85379"
       ]
     },
-    "QuerygetImageauth0FunctionQuerygetImageauth0FunctionAppSyncFunctionFFFA6473": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "QuerygetImageauth0Function",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Query.getImage.auth.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
-      }
-    },
     "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368": {
       "Type": "AWS::AppSync::FunctionConfiguration",
       "Properties": {
@@ -473,12 +443,6 @@
         "Kind": "PIPELINE",
         "PipelineConfig": {
           "Functions": [
-            {
-              "Fn::GetAtt": [
-                "QuerygetImageauth0FunctionQuerygetImageauth0FunctionAppSyncFunctionFFFA6473",
-                "FunctionId"
-              ]
-            },
             {
               "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
@@ -576,12 +540,6 @@
           "Functions": [
             {
               "Fn::GetAtt": [
-                "QuerygetImageauth0FunctionQuerygetImageauth0FunctionAppSyncFunctionFFFA6473",
-                "FunctionId"
-              ]
-            },
-            {
-              "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
                 "FunctionId"
               ]
@@ -637,36 +595,6 @@
                 "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
               },
               "/resolvers/Mutation.createImage.init.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
-      }
-    },
-    "MutationcreateImageauth0FunctionMutationcreateImageauth0FunctionAppSyncFunctionC107C7AB": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "MutationcreateImageauth0Function",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.createImage.auth.1.req.vtl"
             ]
           ]
         },
@@ -743,12 +671,6 @@
             },
             {
               "Fn::GetAtt": [
-                "MutationcreateImageauth0FunctionMutationcreateImageauth0FunctionAppSyncFunctionC107C7AB",
-                "FunctionId"
-              ]
-            },
-            {
-              "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
                 "FunctionId"
               ]
@@ -809,57 +731,6 @@
         },
         "ResponseMappingTemplate": "$util.toJson({})"
       }
-    },
-    "MutationupdateImageauth0FunctionMutationupdateImageauth0FunctionAppSyncFunctionA93E2565": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Fn::GetAtt": [
-            "ImageDataSource",
-            "Name"
-          ]
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "MutationupdateImageauth0Function",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.updateImage.auth.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.updateImage.auth.1.res.vtl"
-            ]
-          ]
-        }
-      },
-      "DependsOn": [
-        "ImageDataSource"
-      ]
     },
     "MutationUpdateImageDataResolverFnMutationUpdateImageDataResolverFnAppSyncFunctionB04541A5": {
       "Type": "AWS::AppSync::FunctionConfiguration",
@@ -931,12 +802,6 @@
             },
             {
               "Fn::GetAtt": [
-                "MutationupdateImageauth0FunctionMutationupdateImageauth0FunctionAppSyncFunctionA93E2565",
-                "FunctionId"
-              ]
-            },
-            {
-              "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
                 "FunctionId"
               ]
@@ -967,57 +832,6 @@
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
       }
-    },
-    "MutationdeleteImageauth0FunctionMutationdeleteImageauth0FunctionAppSyncFunction0EF16D01": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Fn::GetAtt": [
-            "ImageDataSource",
-            "Name"
-          ]
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "MutationdeleteImageauth0Function",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.deleteImage.auth.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.deleteImage.auth.1.res.vtl"
-            ]
-          ]
-        }
-      },
-      "DependsOn": [
-        "ImageDataSource"
-      ]
     },
     "MutationDeleteImageDataResolverFnMutationDeleteImageDataResolverFnAppSyncFunctionCE63A13F": {
       "Type": "AWS::AppSync::FunctionConfiguration",
@@ -1083,12 +897,6 @@
           "Functions": [
             {
               "Fn::GetAtt": [
-                "MutationdeleteImageauth0FunctionMutationdeleteImageauth0FunctionAppSyncFunction0EF16D01",
-                "FunctionId"
-              ]
-            },
-            {
-              "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
                 "FunctionId"
               ]
@@ -1118,36 +926,6 @@
           ]
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
-      }
-    },
-    "SubscriptiononCreateImageauth0FunctionSubscriptiononCreateImageauth0FunctionAppSyncFunctionD54D139D": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "SubscriptiononCreateImageauth0Function",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Subscription.onCreateImage.auth.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
       }
     },
     "SubscriptionOnCreateImageDataResolverFnSubscriptionOnCreateImageDataResolverFnAppSyncFunction810394CA": {
@@ -1208,12 +986,6 @@
           "Functions": [
             {
               "Fn::GetAtt": [
-                "SubscriptiononCreateImageauth0FunctionSubscriptiononCreateImageauth0FunctionAppSyncFunctionD54D139D",
-                "FunctionId"
-              ]
-            },
-            {
-              "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
                 "FunctionId"
               ]
@@ -1252,12 +1024,6 @@
         "Kind": "PIPELINE",
         "PipelineConfig": {
           "Functions": [
-            {
-              "Fn::GetAtt": [
-                "SubscriptiononCreateImageauth0FunctionSubscriptiononCreateImageauth0FunctionAppSyncFunctionD54D139D",
-                "FunctionId"
-              ]
-            },
             {
               "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
@@ -1300,12 +1066,6 @@
           "Functions": [
             {
               "Fn::GetAtt": [
-                "SubscriptiononCreateImageauth0FunctionSubscriptiononCreateImageauth0FunctionAppSyncFunctionD54D139D",
-                "FunctionId"
-              ]
-            },
-            {
-              "Fn::GetAtt": [
                 "QuerygetImagepostAuth0FunctionQuerygetImagepostAuth0FunctionAppSyncFunction65EE7368",
                 "FunctionId"
               ]
@@ -1323,85 +1083,6 @@
             "",
             [
               "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onDeleteImage\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
-              {
-                "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-              },
-              "\"))\n\n$util.toJson({})"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
-      }
-    },
-    "ImageOwnerDataResolverFnImageOwnerDataResolverFnAppSyncFunctionE0422BA4": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "ImageOwnerDataResolverFn",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Image.owner.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Image.owner.res.vtl"
-            ]
-          ]
-        }
-      }
-    },
-    "ImageownerResolver": {
-      "Type": "AWS::AppSync::Resolver",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "FieldName": "owner",
-        "TypeName": "Image",
-        "Kind": "PIPELINE",
-        "PipelineConfig": {
-          "Functions": [
-            {
-              "Fn::GetAtt": [
-                "ImageOwnerDataResolverFnImageOwnerDataResolverFnAppSyncFunctionE0422BA4",
-                "FunctionId"
-              ]
-            }
-          ]
-        },
-        "RequestMappingTemplate": {
-          "Fn::Join": [
-            "",
-            [
-              "$util.qr($ctx.stash.put(\"typeName\", \"Image\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"owner\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
               {
                 "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
               },

@@ -16,33 +16,29 @@
     "nutritionapp": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "nutritionappd3005467",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ],
+      "dependsOn": [],
       "output": {
         "authConfig": {
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authnutritionappd3005467"
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 365,
+              "apiKeyExpirationDate": "2023-11-07T21:44:04.653Z",
+              "description": "Description for API Key. Graphql schema. "
             }
           },
           "additionalAuthenticationProviders": []
         },
         "GraphQLAPIIdOutput": "f32hrxz2tvbhbmkwfugy4vf4sy",
-        "GraphQLAPIEndpointOutput": "https://ymgcdsvt6jdwddtjqiiukxnugm.appsync-api.us-east-1.amazonaws.com/graphql"
+        "GraphQLAPIEndpointOutput": "https://ymgcdsvt6jdwddtjqiiukxnugm.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-bqae3a2ykrenfbs7acmel7rc44"
       },
-      "lastPushTimeStamp": "2022-11-07T16:40:43.977Z",
+      "lastPushTimeStamp": "2022-11-07T21:52:55.003Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-nutritionapp-dev-152757-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apinutritionapp"
-      }
+      },
+      "lastPushDirHash": "odBq+LyQWjEJq3XYLD4e0HJrM4s="
     }
   },
   "auth": {
@@ -80,7 +76,7 @@
         "IdentityPoolName": "nutritionappd3005467_identitypool_d3005467__dev",
         "UserPoolName": "nutritionappd3005467_userpool_d3005467"
       },
-      "lastPushTimeStamp": "2022-11-07T16:40:44.549Z",
+      "lastPushTimeStamp": "2022-11-07T21:52:55.004Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-nutritionapp-dev-152757-deployment/amplify-cfn-templates/auth/nutritionappd3005467-cloudformation-template.json",
         "logicalId": "authnutritionappd3005467"
@@ -97,11 +93,12 @@
         "BucketName": "nutritionappba9b6c4ca45149ff8061ef85f03d2a51152757-dev",
         "Region": "us-east-1"
       },
-      "lastPushTimeStamp": "2022-11-07T16:40:43.980Z",
+      "lastPushTimeStamp": "2022-11-07T21:52:55.328Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-nutritionapp-dev-152757-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
         "logicalId": "storagereactnativenutritionappimagestorage"
-      }
+      },
+      "lastPushDirHash": "8X1cMBbav072pAkXyufZ3hcUUTc="
     }
   }
 }
