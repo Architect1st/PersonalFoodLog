@@ -16,12 +16,16 @@ import { Amplify } from 'aws-amplify'
 import awsconfig from './src/aws-exports'
 
 Amplify.configure(awsconfig)
-// Amplify.configure({
-//   ...awsconfig,
-//   Analytics: {
-//       disabled: true,
-//   },
-// });
+
+import {
+  Predictions,
+  AmazonAIPredictionsProvider
+} from '@aws-amplify/predictions';
+
+Amplify.configure(awsconfig);
+Amplify.addPluggable(new AmazonAIPredictionsProvider());
+
+import * as ImageManipulator from 'expo-image-manipulator';
 
 //display picture information
 const Section = ({ children, title }): Node => {
@@ -100,11 +104,35 @@ export default function App() {
     };
 
     let newPhoto = await cameraRef.current.takePictureAsync(options);
+    // newPhoto = await ImageManipulator.manipulateAsync(newPhoto.uri, [{resize: {width: 2000, height: 2000}}]);
     setPhoto(newPhoto);
-
     const response = await fetch(newPhoto.uri);
     const blob = await response.blob();
     const key = newPhoto.uri.split("/").pop();
+
+    // Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
+    //     .then(result => {
+    //       Predictions.identify({
+    //         labels: {
+    //           source: {
+    //             key: key,
+    //             level: 'public'
+    //           },
+    //           type: "ALL"
+    //         }
+    //       }).then(result => {
+    //         const { labels } = result;
+    //         const labelNames = labels.map(l => l.name);
+            
+    //         addImage(key, labelNames);
+    //         setShowCamera(false);
+    //       }).catch(err => {
+    //         console.log('error: ', err);
+    //       });
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
 
     Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
       .then(result => {
@@ -115,34 +143,7 @@ export default function App() {
       .catch(err => {
         console.log(err)
       });
-  
-
 };
-
-// function storeImage(photo){
-//   const key = photo.uri.split("/").pop();
-//   const fileType = photo.type;
-//   const access = { level: "public", contentType: 'image/jpg' };
-//   const owner = "public user";
-
-//   const blobData = photo;
-  
-//   try {
-//     Storage.put(
-//       key, 
-//       blobData, 
-//       access,
-//       fileType,
-//       owner
-//       ).then(result => {
-//         console.log("Storage put result: "+ result);
-//         addImage(key); // add image to home page
-//         setShowCamera(false); // return to homapage
-//       })
-//   } catch (err) {
-//     console.log('error: ', err)
-//   }
-// }
   
   //display photo after photo is taken
   if (photo) {
@@ -177,7 +178,7 @@ export default function App() {
         <Camera style={styles.preview} ref={cameraRef}></Camera>
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity onPress={takePic} style={styles.capture}>
-            <Text style={{ fontSize: 14 }}> Label Image </Text>
+            <Text style={{ fontSize: 14 }}> Scan Food </Text>
           </TouchableOpacity>
         </View>
       </View>
