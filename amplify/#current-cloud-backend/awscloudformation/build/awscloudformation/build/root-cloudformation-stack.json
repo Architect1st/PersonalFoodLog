@@ -253,6 +253,28 @@
         }
       }
     },
+    "predictionsfruitImageLabler": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-nutritionapp-dev-152757-deployment/amplify-cfn-templates/predictions/fruitImageLabler-template.json",
+        "Parameters": {
+          "resourceName": "fruitImageLabler",
+          "identifyPolicyName": "identifyPolicy11f76dd4",
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "adminAuthProtected": "DISALLOW",
+          "adminGuestProtected": "DISALLOW",
+          "identifyType": "identifyLabels",
+          "access": "authAndGuest",
+          "type": "LABELS",
+          "env": "dev"
+        }
+      }
+    },
     "UpdateRolesWithIDPFunction": {
       "DependsOn": [
         "AuthRole",

@@ -22,5 +22,11 @@ export type AmplifyDependentResourcesAttributes = {
             "BucketName": "string",
             "Region": "string"
         }
+    },
+    "predictions": {
+        "fruitImageLabler": {
+            "region": "string",
+            "type": "string"
+        }
     }
 }

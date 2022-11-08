@@ -2,7 +2,6 @@
     "AppSyncApiName": "nutritionapp",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false,
-    "AuthModeLastUpdated": "2022-11-07T21:44:11.068Z",
     "S3DeploymentBucket": "amplify-nutritionapp-dev-152757-deployment",
     "S3DeploymentRootKey": "amplify-appsync-files/99f19ad5d5c7bbcf9e6bf52f191ab85837b75a74"
 }

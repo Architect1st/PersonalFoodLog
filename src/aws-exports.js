@@ -31,7 +31,18 @@ const awsmobile = {
         "EMAIL"
     ],
     "aws_user_files_s3_bucket": "nutritionappba9b6c4ca45149ff8061ef85f03d2a51152757-dev",
-    "aws_user_files_s3_bucket_region": "us-east-1"
+    "aws_user_files_s3_bucket_region": "us-east-1",
+    "predictions": {
+        "identify": {
+            "identifyLabels": {
+                "proxy": false,
+                "region": "us-east-1",
+                "defaults": {
+                    "type": "LABELS"
+                }
+            }
+        }
+    }
 };
 
 
