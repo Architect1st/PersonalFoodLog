@@ -71,13 +71,15 @@ export default function App() {
     }
   }
 
-  async function Predict (photo) {
+  async function Predict (photo, key) {
     try{
       let formData = new FormData();
-      let file = {uri: photo.uri, type: 'application/octet-stream', name: 'image.jpg'};
+      let file = {uri: photo.uri, type: 'application/octet-stream', name: '1-image.jpg'};
       formData.append("file", file);
       console.log(formData)
-      fetch("http://10.0.0.190:80", {
+      let url = "http://172.20.10.6:80"
+      // let url = "http://10.0.0.190:80"
+      fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data;charset=utf-8',
@@ -85,16 +87,15 @@ export default function App() {
         body: formData,
       }) .then(response=>response.json())//把response转为json
           .then(responseJson=> { // 拿到上面的转好的json
-              console.log(responseJson) // 打印返回结果
-              if (responseJson.code == 200){ // 200为请求成功
-                  success && success(responseJson.data)
-              }else {
-                  fail && fail()//可以处理返回的错误信息
-              }
+              console.log ("Success!")
+              // console.log(responseJson) // 打印返回结果
+              // console.log([responseJson.name, responseJson.calories])
+              let label = [responseJson.name, responseJson.calories]
+              addImage(key, label);
+              return label;
           })
           .catch(e=>{
               console.log(e)
-              error && error(error)
           })
     } catch (err) {
       console.log('error predicting:', err);
@@ -126,44 +127,30 @@ export default function App() {
     };
 
     let newPhoto = await cameraRef.current.takePictureAsync(options);
-    // newPhoto = await ImageManipulator.manipulateAsync(newPhoto.uri, [{resize: {width: 2000, height: 2000}}]);
     setPhoto(newPhoto);
+
     const response = await fetch(newPhoto.uri);
     const blob = await response.blob();
     const key = newPhoto.uri.split("/").pop();
-
+    const label = await Predict(newPhoto, key).then( function(){
+    });
+    
     Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
       .then(result => {
-        Predict (newPhoto);
-        // Predict(blob)
-        // .then(result => {
-        //   const { labels } = result;
-        //   const labelNames = labels.map(l => l.name);
-          
-        //   console.log(result);
-        //   addImage(key, labelNames);
-        //   setShowCamera(false);
-        // })
-        console.log(result)
-        addImage(key);
         setShowCamera(false);
       })
-      .catch(err => {
-        console.log(err)
-    });
+      .catch(err => {console.log(err)});
   };
   
   //display photo after photo is taken
   if (photo) {
     let sharePic = () => {
-      // storeImage(photo);
       shareAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });
     };
 
     let savePhoto = () => {
-      // storeImage(photo);
       MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });
@@ -201,14 +188,7 @@ export default function App() {
       contentInsetAdjustmentBehavior="automatic"
       // style={backgroundStyle}
       renderItem={({ item, index }) => (
-        <View key={item.id ? item.id : index} >
-          <Section title={item.key}>
-          {item.labels.map((label, index) => (
-          <Text key={index}>{label}, </Text>
-          ))
-          }
-        </Section>
-        {/* <View key={item.id ? item.id : index}>
+        <View key={item.id ? item.id : index}>
           <View style={styles.imageContainer}>
               <S3Image level="public" imgKey={item.key} style={styles.image}  />
             </View>
@@ -217,7 +197,7 @@ export default function App() {
               <Text key={index}>{label}, </Text>
             ))
             }
-          </Section> */}
+          </Section>
         </View>
       )}></FlatList>
     </SafeAreaView>
