@@ -15,15 +15,7 @@ import { S3Image } from 'aws-amplify-react-native';
 import { Amplify } from 'aws-amplify'
 import awsconfig from './src/aws-exports'
 
-Amplify.configure(awsconfig)
-
-import {
-  Predictions,
-  AmazonAIPredictionsProvider
-} from '@aws-amplify/predictions';
-
 Amplify.configure(awsconfig);
-Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
 import * as ImageManipulator from 'expo-image-manipulator';
 
@@ -81,15 +73,16 @@ export default function App() {
 
   async function Predict (photo) {
     try{
-      console.log(photo);
-      fetch("http://10.0.0.190:80",{
-          method: 'POST',
-          headers:{
-              'Accept': 'application/json',
-              //媒体格式类型key/value格式
-              'Content-Type':'multipart/form-data',
-          },
-          body: photo
+      let formData = new FormData();
+      let file = {uri: photo.uri, type: 'application/octet-stream', name: 'image.jpg'};
+      formData.append("file", file);
+      console.log(formData)
+      fetch("http://10.0.0.190:80", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data;charset=utf-8',
+        },
+        body: formData,
       }) .then(response=>response.json())//把response转为json
           .then(responseJson=> { // 拿到上面的转好的json
               console.log(responseJson) // 打印返回结果
