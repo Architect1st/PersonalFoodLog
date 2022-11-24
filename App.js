@@ -69,13 +69,41 @@ export default function App() {
     } catch (err) { console.log('error fetching images'); console.log(err) }
   }
   
-  async function addImage(key) {
+  async function addImage(key, labels) {
     try {
-      const image = { key: key, labels: ['cat', 'animal'] };
+      const image = { key: key, labels: labels };
       setImages([...images, image]);
       await API.graphql(graphqlOperation(createImage, { input: image }));
     } catch (err) {
-      console.log('error creating image:', err)
+      console.log('error creating image:', err);
+    }
+  }
+
+  async function Predict (photo) {
+    try{
+      fetch("http://10.0.0.190:80",{
+          method: 'POST',
+          headers:{
+              'Accept': 'application/json',
+              //媒体格式类型key/value格式
+              'Content-Type':'multipart/form-data',
+          },
+          body: photo
+      }) .then(response=>response.json())//把response转为json
+          .then(responseJson=> { // 拿到上面的转好的json
+              console.log(responseJson) // 打印返回结果
+              if (responseJson.code == 200){ // 200为请求成功
+                  success && success(responseJson.data)
+              }else {
+                  fail && fail()//可以处理返回的错误信息
+              }
+          })
+          .catch(e=>{
+              console.log(e)
+              error && error(error)
+          })
+    } catch (err) {
+      console.log('error predicting:', err);
     }
   }
 
@@ -112,14 +140,24 @@ export default function App() {
 
     Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
       .then(result => {
+        Predict (newPhoto);
+        // Predict(blob)
+        // .then(result => {
+        //   const { labels } = result;
+        //   const labelNames = labels.map(l => l.name);
+          
+        //   console.log(result);
+        //   addImage(key, labelNames);
+        //   setShowCamera(false);
+        // })
         console.log(result)
         addImage(key);
         setShowCamera(false);
       })
       .catch(err => {
         console.log(err)
-      });
-};
+    });
+  };
   
   //display photo after photo is taken
   if (photo) {
@@ -169,7 +207,14 @@ export default function App() {
       contentInsetAdjustmentBehavior="automatic"
       // style={backgroundStyle}
       renderItem={({ item, index }) => (
-        <View key={item.id ? item.id : index}>
+        <View key={item.id ? item.id : index} >
+          <Section title={item.key}>
+          {item.labels.map((label, index) => (
+          <Text key={index}>{label}, </Text>
+          ))
+          }
+        </Section>
+        {/* <View key={item.id ? item.id : index}>
           <View style={styles.imageContainer}>
               <S3Image level="public" imgKey={item.key} style={styles.image}  />
             </View>
@@ -178,7 +223,7 @@ export default function App() {
               <Text key={index}>{label}, </Text>
             ))
             }
-          </Section>
+          </Section> */}
         </View>
       )}></FlatList>
     </SafeAreaView>
