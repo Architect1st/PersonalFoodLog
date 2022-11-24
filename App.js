@@ -81,6 +81,7 @@ export default function App() {
 
   async function Predict (photo) {
     try{
+      console.log(photo);
       fetch("http://10.0.0.190:80",{
           method: 'POST',
           headers:{
