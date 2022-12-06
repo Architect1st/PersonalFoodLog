@@ -19,6 +19,16 @@ Amplify.configure(awsconfig);
 
 import * as ImageManipulator from 'expo-image-manipulator';
 
+import {
+  Predictions,
+  AmazonAIPredictionsProvider
+} from '@aws-amplify/predictions';
+
+Amplify.configure(awsconfig);
+Amplify.addPluggable(new AmazonAIPredictionsProvider());
+
+import * as ImageManipulator from 'expo-image-manipulator';
+
 //display picture information
 const Section = ({ children, title }): Node => {
   return (
@@ -127,8 +137,9 @@ export default function App() {
     };
 
     let newPhoto = await cameraRef.current.takePictureAsync(options);
+    // newPhoto = await ImageManipulator.manipulateAsync(newPhoto.uri, [{resize: {width: 2000, height: 2000}}]);
     setPhoto(newPhoto);
-
+    
     const response = await fetch(newPhoto.uri);
     const blob = await response.blob();
     const key = newPhoto.uri.split("/").pop();
@@ -146,12 +157,14 @@ export default function App() {
   //display photo after photo is taken
   if (photo) {
     let sharePic = () => {
+      // storeImage(photo);
       shareAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });
     };
 
     let savePhoto = () => {
+      // storeImage(photo);
       MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });

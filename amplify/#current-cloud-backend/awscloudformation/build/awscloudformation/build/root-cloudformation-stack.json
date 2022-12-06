@@ -160,14 +160,8 @@
           "AppSyncApiName": "nutritionapp",
           "DynamoDBBillingMode": "PAY_PER_REQUEST",
           "DynamoDBEnableServerSideEncryption": false,
-          "AuthCognitoUserPoolId": {
-            "Fn::GetAtt": [
-              "authnutritionappd3005467",
-              "Outputs.UserPoolId"
-            ]
-          },
           "S3DeploymentBucket": "amplify-nutritionapp-dev-152757-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/ba969b8dd9c2eaee996e942c022d593b2e189694",
+          "S3DeploymentRootKey": "amplify-appsync-files/99f19ad5d5c7bbcf9e6bf52f191ab85837b75a74",
           "env": "dev"
         }
       }
@@ -255,6 +249,28 @@
           "s3PermissionsAuthenticatedUploads": "s3:PutObject",
           "s3PermissionsGuestPublic": "s3:PutObject,s3:GetObject",
           "s3PermissionsGuestUploads": "s3:PutObject",
+          "env": "dev"
+        }
+      }
+    },
+    "predictionsfruitImageLabler": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-nutritionapp-dev-152757-deployment/amplify-cfn-templates/predictions/fruitImageLabler-template.json",
+        "Parameters": {
+          "resourceName": "fruitImageLabler",
+          "identifyPolicyName": "identifyPolicy11f76dd4",
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "adminAuthProtected": "DISALLOW",
+          "adminGuestProtected": "DISALLOW",
+          "identifyType": "identifyLabels",
+          "access": "authAndGuest",
+          "type": "LABELS",
           "env": "dev"
         }
       }

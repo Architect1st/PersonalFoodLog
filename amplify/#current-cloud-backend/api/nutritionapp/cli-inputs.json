@@ -4,8 +4,10 @@
     "apiName": "nutritionapp",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "AMAZON_COGNITO_USER_POOLS",
-      "cognitoUserPoolId": "authnutritionappd3005467"
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2023-11-07T21:44:04.653Z",
+      "keyDescription": "Description for API Key. Graphql schema. "
     },
     "conflictResolution": {},
     "additionalAuthTypes": []

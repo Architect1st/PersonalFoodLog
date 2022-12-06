@@ -1,6 +1,7 @@
 export type AmplifyDependentResourcesAttributes = {
     "api": {
         "nutritionapp": {
+            "GraphQLAPIKeyOutput": "string",
             "GraphQLAPIIdOutput": "string",
             "GraphQLAPIEndpointOutput": "string"
         }
@@ -20,6 +21,12 @@ export type AmplifyDependentResourcesAttributes = {
         "reactnativenutritionappimagestorage": {
             "BucketName": "string",
             "Region": "string"
+        }
+    },
+    "predictions": {
+        "fruitImageLabler": {
+            "region": "string",
+            "type": "string"
         }
     }
 }
