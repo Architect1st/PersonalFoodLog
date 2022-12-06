@@ -15,7 +15,9 @@ import { S3Image } from 'aws-amplify-react-native';
 import { Amplify } from 'aws-amplify'
 import awsconfig from './src/aws-exports'
 
-Amplify.configure(awsconfig)
+Amplify.configure(awsconfig);
+
+import * as ImageManipulator from 'expo-image-manipulator';
 
 import {
   Predictions,
@@ -69,13 +71,44 @@ export default function App() {
     } catch (err) { console.log('error fetching images'); console.log(err) }
   }
   
-  async function addImage(key) {
+  async function addImage(key, labels) {
     try {
-      const image = { key: key, labels: ['cat', 'animal'] };
+      const image = { key: key, labels: labels };
       setImages([...images, image]);
       await API.graphql(graphqlOperation(createImage, { input: image }));
     } catch (err) {
-      console.log('error creating image:', err)
+      console.log('error creating image:', err);
+    }
+  }
+
+  async function Predict (photo, key) {
+    try{
+      let formData = new FormData();
+      let file = {uri: photo.uri, type: 'application/octet-stream', name: '1-image.jpg'};
+      formData.append("file", file);
+      console.log(formData)
+      let url = "http://172.20.10.2:80" // for cellular hotspot
+      // let url = "http://10.0.0.190:80" // for router
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data;charset=utf-8',
+        },
+        body: formData,
+      }) .then(response=>response.json())//把response转为json
+          .then(responseJson=> { // 拿到上面的转好的json
+              console.log ("Success!")
+              // console.log(responseJson) // 打印返回结果
+              // console.log([responseJson.name, responseJson.calories])
+              let label = [responseJson.name, responseJson.calories]
+              addImage(key, label);
+              return label;
+          })
+          .catch(e=>{
+              console.log(e)
+          })
+    } catch (err) {
+      console.log('error predicting:', err);
     }
   }
 
@@ -106,44 +139,20 @@ export default function App() {
     let newPhoto = await cameraRef.current.takePictureAsync(options);
     // newPhoto = await ImageManipulator.manipulateAsync(newPhoto.uri, [{resize: {width: 2000, height: 2000}}]);
     setPhoto(newPhoto);
+    
     const response = await fetch(newPhoto.uri);
     const blob = await response.blob();
     const key = newPhoto.uri.split("/").pop();
-
-    // Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
-    //     .then(result => {
-    //       Predictions.identify({
-    //         labels: {
-    //           source: {
-    //             key: key,
-    //             level: 'public'
-    //           },
-    //           type: "ALL"
-    //         }
-    //       }).then(result => {
-    //         const { labels } = result;
-    //         const labelNames = labels.map(l => l.name);
-            
-    //         addImage(key, labelNames);
-    //         setShowCamera(false);
-    //       }).catch(err => {
-    //         console.log('error: ', err);
-    //       });
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //     });
-
+    const label = await Predict(newPhoto, key).then( function(){
+    });
+    
+    // await addImage();
     Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
       .then(result => {
-        console.log(result)
-        addImage(key);
         setShowCamera(false);
       })
-      .catch(err => {
-        console.log(err)
-      });
-};
+      .catch(err => {console.log(err)});
+  };
   
   //display photo after photo is taken
   if (photo) {
@@ -197,9 +206,9 @@ export default function App() {
           <View style={styles.imageContainer}>
               <S3Image level="public" imgKey={item.key} style={styles.image}  />
             </View>
-          <Section title={item.key}>
+          <Section title={item.key} style={styles.SectionStyle}>
             {item.labels.map((label, index) => (
-              <Text key={index}>{label}, </Text>
+              <Text key={index}>{label}, </Text> 
             ))
             }
           </Section>
@@ -211,9 +220,13 @@ export default function App() {
 };
 
 const styles = StyleSheet.create({
+  SectionStyle: {
+    marginBottom: 10,
+  },
   //Style for Photo information Section
   sectionContainer: {
     marginTop: 32,
+    marginBottom: 32,
     paddingHorizontal: 24,
   },
   sectionTitle: {
@@ -274,4 +287,3 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
-
