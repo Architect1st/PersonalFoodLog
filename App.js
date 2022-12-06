@@ -77,8 +77,8 @@ export default function App() {
       let file = {uri: photo.uri, type: 'application/octet-stream', name: '1-image.jpg'};
       formData.append("file", file);
       console.log(formData)
-      let url = "http://172.20.10.6:80"
-      // let url = "http://10.0.0.190:80"
+      let url = "http://172.20.10.2:80" // for cellular hotspot
+      // let url = "http://10.0.0.190:80" // for router
       fetch(url, {
         method: 'POST',
         headers: {
@@ -135,6 +135,7 @@ export default function App() {
     const label = await Predict(newPhoto, key).then( function(){
     });
     
+    // await addImage();
     Storage.put(key, blob, { level: 'public', contentType: 'image/jpg' })
       .then(result => {
         setShowCamera(false);
@@ -192,9 +193,9 @@ export default function App() {
           <View style={styles.imageContainer}>
               <S3Image level="public" imgKey={item.key} style={styles.image}  />
             </View>
-          <Section title={item.key}>
+          <Section title={item.key} style={styles.SectionStyle}>
             {item.labels.map((label, index) => (
-              <Text key={index}>{label}, </Text>
+              <Text key={index}>{label}, </Text> 
             ))
             }
           </Section>
@@ -206,9 +207,13 @@ export default function App() {
 };
 
 const styles = StyleSheet.create({
+  SectionStyle: {
+    marginBottom: 10,
+  },
   //Style for Photo information Section
   sectionContainer: {
     marginTop: 32,
+    marginBottom: 32,
     paddingHorizontal: 24,
   },
   sectionTitle: {
